@@ -1,41 +1,71 @@
-import sqlite3 #bliblioteca nativa do Python para BD
+import mysql.connector
 
-DB_NAME = "escola.db" #nome do banco de dados
+#Dados do servidor MySQL
+HOST = "localhost"
+USER = "root"
+PASSWORD = "senac"
+DB_NAME = "escola_db" #nome do banco de dados
 
-def conectar():
-    #abre e retorna uma conexão em SQLite3 com o banco
-    return sqlite3.connect(DB_NAME)
+def conectar(usando_banco=True):
+    """Conectar ao Mysql 
+    -usando_banco=True -> conectar direto ao schema DB_NAME
+    -usando_banco=False -> conectar sem definir um banco"""
+    if usando_banco:
+        return mysql.connector.connect(
+            host = HOST,
+            user = USER,
+            port = "3306",
+            password = PASSWORD,
+            database = DB_NAME
+        )
+    else:
+        return mysql.connector.connect(
+            host = HOST,
+            user = USER,
+            port="3306",
+            password = PASSWORD
+        ) 
+
+def criar_banco():
+    #Criar banco caso não exista
+    conn = conectar(usando_banco=False) #Cria uma instância de conexão com o banco
+    cursor = conn.cursor() # Aponta para o Banco de Dadosa
+    cursor.execute(""" CREATE DATABASE 
+                   IF NOT EXISTS {DB_NAME}""")
+    conn.commit() # salva as alterações no banco
+    conn.close() # fecha a conexão com o banco
+
 
 def criar_tabelas():
     #cria as tabelas (curso, turma, aluno) 
     # se não existirem do BD
-    con = conectar() # abre a conexão com o banco
-    cur = con.cursor() # cria um cursor que aponta pro BD e executa intruções SQL
+    conn = conectar() # abre a conexão com o banco
+    cursor = conn.cursor() # cria um cursor que aponta pro BD e executa intruções SQL
     
-    cur.execute(""" 
+    cursor.execute(""" 
                     CREATE TABLE IF NOT EXISTS cursos(
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        nome TEXT NOT NULL
+                        id INT PRIMARY KEY AUTO_INCREMENT,
+                        nome VARCHAR(100) NOT NULL
                     )
                  """)
 
-    cur.execute(""" 
+    cursor.execute(""" 
                     CREATE TABLE IF NOT EXISTS turmas(
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        nome TEXT NOT NULL,
-                        curso_id INTEGER,
+                        id INT PRIMARY KEY AUTO_INCREMENT,
+                        nome VARCHAR(100) NOT NULL,
+                        curso_id INT,
                         FOREIGN KEY(curso_id) REFERENCES cursos(id)
                     )
                  """)
     
-    cur.execute(""" 
+    cursor.execute(""" 
                     CREATE TABLE IF NOT EXISTS alunos(
-                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        nome TEXT NOT NULL,
-                        turma_id INTEGER,
+                        id INT PRIMARY KEY AUTO_INCREMENT,
+                        nome VARCHAR(100) NOT NULL,
+                        turma_id INT,
                         FOREIGN KEY(turma_id) REFERENCES turmas(id)
                     )
                  """)
     
-    con.commit() #salva(confirmar) as alterações no banco
-    con.close() #fechar a conexão com o banco
+    conn.commit() #salva(confirmar) as alterações no banco
+    conn.close() #fechar a conexão com o banco
