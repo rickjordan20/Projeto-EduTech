@@ -20,8 +20,8 @@ class Curso:
         con = conectar()
         cur = con.cursor()
 
-        cur.execute("INSERT INTO cursos(nome) VALUES(?)",(nome,))
-        # "?" é um placeholder que protege SQL Injection e formata os dados
+        cur.execute("INSERT INTO cursos(nome) VALUES(%s)",(nome,))
+        # "%s" é um placeholder que protege SQL Injection e formata os dados
 
         con.commit()
         con.close()
@@ -31,7 +31,7 @@ class Curso:
         con = conectar()
         cur = con.cursor()
 
-        cur.execute("UPDATE cursos SET nome=? WHERE id=?",(nome,id_))
+        cur.execute("UPDATE cursos SET nome=%s WHERE id=%s",(nome,id_))
 
         con.commit()
         con.close()
@@ -41,7 +41,7 @@ class Curso:
         con = conectar()
         cur = con.cursor()
 
-        cur.execute("DELET FROM cursos WHERE id=?",(id_,))
+        cur.execute("DELET FROM cursos WHERE id=%s",(id_,))
 
         con.commit()
         con.close()
@@ -69,8 +69,8 @@ class Turma:
         con = conectar()
         cur = con.cursor()
 
-        cur.execute("INSERT INTO turmas(nome,curso_id) VALUES(?,?)",(nome,curso_id))
-        # "?" é um placeholder que protege SQL Injection e formata os dados
+        cur.execute("INSERT INTO turmas(nome,curso_id) VALUES(%s,%s)",(nome,curso_id))
+        # "%s" é um placeholder que protege SQL Injection e formata os dados
 
         con.commit()
         con.close()
@@ -80,7 +80,7 @@ class Turma:
         con = conectar()
         cur = con.cursor()
 
-        cur.execute("UPDATE turmas SET nome=?,curso_id=? WHERE id=?",(nome,curso_id,id_))
+        cur.execute("UPDATE turmas SET nome=%s,curso_id=%s WHERE id=%s",(nome,curso_id,id_))
 
         con.commit()
         con.close()
@@ -90,7 +90,7 @@ class Turma:
         con = conectar()
         cur = con.cursor()
 
-        cur.execute("DELET FROM turmas WHERE id=?",(id_,))
+        cur.execute("DELET FROM turmas WHERE id=%s",(id_,))
 
         con.commit()
         con.close()
@@ -99,7 +99,7 @@ class Turma:
         con = conectar()
         cur = con.cursor()
         
-        cur.execute("SELECT id, nome FROM alunos WHERE turma_id=?",(turma_id,))
+        cur.execute("SELECT id, nome FROM alunos WHERE turma_id=%s",(turma_id,))
         dados = cur.fetchall() # retorna o resultado da consulta no banco
         con.close() # fecha a conxao com o banco
         return dados
@@ -125,7 +125,7 @@ class Aluno:
         cur = con.cursor()
     
         cur.execute(
-                    "INSERT INTO alunos(nome,turma_id) VALUES(?,?)",(nome,turma_id))
+                    "INSERT INTO alunos(nome,turma_id) VALUES(%s,%s)",(nome,turma_id))
         con.commit() #salva as alteracoes no banco
         con.close() #fecha a conexao com o banco
     
@@ -135,7 +135,7 @@ class Aluno:
         cur = con.cursor()
     
         cur.execute(
-                    "UPDATE alunos SET nome=?, turma_id=? WHERE id=?",(nome,turma_id,id_))
+                    "UPDATE alunos SET nome=%s, turma_id=%s WHERE id=%s",(nome,turma_id,id_))
         con.commit() #salva as alteracoes no banco
         con.close() #fecha a conexao com o banco
 
@@ -145,6 +145,6 @@ class Aluno:
         cur = con.cursor()
     
         cur.execute(
-                    "DELETE FROM alunos WHERE id=?",(id_,))
+                    "DELETE FROM alunos WHERE id=%s",(id_,))
         con.commit() #salva as alteracoes no banco
         con.close() #fecha a conexao com o banco
