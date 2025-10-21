@@ -11,14 +11,13 @@ from views.turmas import TurmasView     # View de gerenciamento de Turmas
 
 
 
-
 class App(tk.Tk):
     """Janela principal da aplicação."""
     def __init__(self):
         super().__init__()                                  # Inicializa tk.Tk
         self.title("EduTec - Sistema Escolar")              # Título da janela
         self.geometry("600x460")                            # Tamanho padrão
-        self.configure(bg="#e0f7fa")                        # Cor de fundo
+        self.configure(bg="#0c1111")                        # Cor de fundo
 
 
         criar_tabelas()                                     # Garante as tabelas do BD
@@ -51,12 +50,14 @@ class App(tk.Tk):
     def abrir_cursos(self):
         """Navega para a tela de Cursos."""
         self.limpar()
+        print("abrir cursos")
         CursosView(self, self.menu)
 
 
     def abrir_alunos(self):
         """Navega para a tela de Alunos."""
         self.limpar()
+        print("abrir alunos")
         AlunosView(self, self.menu)
 
 
