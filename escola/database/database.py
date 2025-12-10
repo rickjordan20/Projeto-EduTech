@@ -3,7 +3,7 @@ import mysql.connector
 #Dados do servidor MySQL
 HOST = "localhost"
 USER = "root"
-PASSWORD = "senac"
+PASSWORD = "980507@Rick"
 DB_NAME = "escola_db" #nome do banco de dados
 
 def conectar(usando_banco=True):
